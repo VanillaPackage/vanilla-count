@@ -1,8 +1,8 @@
 <?php
 
-namespace Rentalhost\VanillaCount;
+namespace Rentalhost\VanillaCount\Test;
 
-use PHPUnit_Framework_TestCase;
+use Rentalhost\VanillaCount\Count;
 use Rentalhost\VanillaCount\Locale\Locale;
 use Rentalhost\VanillaCount\Locale\PortugueseLocale;
 
@@ -10,13 +10,18 @@ use Rentalhost\VanillaCount\Locale\PortugueseLocale;
  * Class PortugueseLocaleTest
  * @package Rentalhost\VanillaCount
  */
-class PortugueseLocaleTest extends PHPUnit_Framework_TestCase
+class PortugueseLocaleTest extends TestCase
 {
     /**
      * Test number spelling.
      *
      * @param int    $number   Number to spelling.
      * @param string $expected Spelling expected.
+     *
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::__construct
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::simple
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::format
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::formatType
      *
      * @dataProvider dataSpell
      */
@@ -277,6 +282,10 @@ class PortugueseLocaleTest extends PHPUnit_Framework_TestCase
      * @param int    $number   Number to spelling.
      * @param string $expected Spelling expected.
      *
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::__construct
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::simple
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::format
+     *
      * @dataProvider dataSpellWithOptions
      */
     public function testSpellWithOptions($options, $number, $expected)
@@ -385,6 +394,129 @@ class PortugueseLocaleTest extends PHPUnit_Framework_TestCase
 
             [ [ 'defaultSeparator' => null ], 1001001, 'um milhão mil e um' ],
             [ [ 'lastSeparator' => 'and' ], 1001001, 'um milhão, mil and um' ],
+        ];
+    }
+
+    /**
+     * Test number spelling with options.
+     *
+     * @param array  $options  Options to spelling.
+     * @param int    $number   Number to spelling.
+     * @param string $expected Spelling expected.
+     *
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::format
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::formatType
+     * @covers       \Rentalhost\VanillaCount\Locale\PortugueseLocale::formatType
+     *
+     * @dataProvider dataSpellCurrency
+     */
+    public function testSpellCurrency($options, $number, $expected)
+    {
+        $count = new Count(new PortugueseLocale($options));
+
+        static::assertSame($expected, $count->spell($number, Count::SPELLING_CURRENCY));
+    }
+
+    /**
+     * Data provider.
+     */
+    public function dataSpellCurrency()
+    {
+        return [
+            [ null, 0, 'zero real' ],
+            [ null, 1, 'um real' ],
+            [ null, 2, 'dois reais' ],
+            [ null, 1000, 'mil reais' ],
+            [ null, 1001, 'mil e um reais' ],
+            [ null, 1002, 'mil e dois reais' ],
+            [ null, 1000000, 'um milhão de reais' ],
+            [ null, 2000000, 'dois milhões de reais' ],
+            [ null, 1001001, 'um milhão, mil e um reais' ],
+            [ null, 1002000000, 'um bilhão e dois milhões de reais' ],
+
+            [ null, 1000, 'mil reais' ],
+            [ null, 1001, 'mil e um reais' ],
+            [ null, 1010, 'mil e dez reais' ],
+            [ null, 1011, 'mil e onze reais' ],
+            [ null, 1021, 'mil e vinte e um reais' ],
+            [ null, 1100, 'mil e cem reais' ],
+            [ null, 1101, 'mil, cento e um reais' ],
+            [ null, 1111, 'mil, cento e onze reais' ],
+
+            [ null, 2000, 'dois mil reais' ],
+            [ null, 3000, 'três mil reais' ],
+            [ null, 4000, 'quatro mil reais' ],
+            [ null, 5000, 'cinco mil reais' ],
+            [ null, 6000, 'seis mil reais' ],
+            [ null, 7000, 'sete mil reais' ],
+            [ null, 8000, 'oito mil reais' ],
+            [ null, 9000, 'nove mil reais' ],
+
+            [ null, 0.01, 'um centavo' ],
+            [ null, 0.15, 'quinze centavos' ],
+
+            [ null, 0.00, 'zero real' ],
+            [ null, 1.00, 'um real' ],
+            [ null, 2.00, 'dois reais' ],
+            [ null, 2.01, 'dois reais e um centavo' ],
+            [ null, 2.50, 'dois reais e cinquenta centavos' ],
+
+            [ null, 1000.01, 'mil reais e um centavo' ],
+            [ null, 1101.01, 'mil, cento e um reais e um centavo' ],
+            [ null, 1000000.01, 'um milhão de reais e um centavo' ],
+            [ null, 1001001.01, 'um milhão, mil e um reais e um centavo' ],
+
+            [ null, 2000.02, 'dois mil reais e dois centavos' ],
+            [ null, 2000000.02, 'dois milhões de reais e dois centavos' ],
+            [ null, 2002002.02, 'dois milhões, dois mil e dois reais e dois centavos' ],
+
+            [ [ 'defaultCurrency' => 'dollar' ], 0, 'zero dólar' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1, 'um dólar' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 2, 'dois dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1000, 'mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1001, 'mil e um dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1002, 'mil e dois dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1000000, 'um milhão de dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 2000000, 'dois milhões de dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1001001, 'um milhão, mil e um dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1001001, 'um milhão, mil e um dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1002000000, 'um bilhão e dois milhões de dólares' ],
+
+            [ [ 'defaultCurrency' => 'dollar' ], 1000, 'mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1001, 'mil e um dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1010, 'mil e dez dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1011, 'mil e onze dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1021, 'mil e vinte e um dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1100, 'mil e cem dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1101, 'mil, cento e um dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1111, 'mil, cento e onze dólares' ],
+
+            [ [ 'defaultCurrency' => 'dollar' ], 2000, 'dois mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 3000, 'três mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 4000, 'quatro mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 5000, 'cinco mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 6000, 'seis mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 7000, 'sete mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 8000, 'oito mil dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 9000, 'nove mil dólares' ],
+
+            [ [ 'defaultCurrency' => 'dollar' ], 0.01, 'um centavo' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 0.15, 'quinze centavos' ],
+
+            [ [ 'defaultCurrency' => 'dollar' ], 0.00, 'zero dólar' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1.00, 'um dólar' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 2.00, 'dois dólares' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 2.01, 'dois dólares e um centavo' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 2.50, 'dois dólares e cinquenta centavos' ],
+
+            [ [ 'defaultCurrency' => 'dollar' ], 1000.01, 'mil dólares e um centavo' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1101.01, 'mil, cento e um dólares e um centavo' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1000000.01, 'um milhão de dólares e um centavo' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 1001001.01, 'um milhão, mil e um dólares e um centavo' ],
+
+            [ [ 'defaultCurrency' => 'dollar' ], 2000.02, 'dois mil dólares e dois centavos' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 2000000.02, 'dois milhões de dólares e dois centavos' ],
+            [ [ 'defaultCurrency' => 'dollar' ], 2002002.02, 'dois milhões, dois mil e dois dólares e dois centavos' ],
         ];
     }
 }

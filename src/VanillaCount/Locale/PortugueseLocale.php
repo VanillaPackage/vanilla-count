@@ -2,6 +2,8 @@
 
 namespace Rentalhost\VanillaCount\Locale;
 
+use Rentalhost\VanillaCount\Count;
+use Rentalhost\VanillaCount\Currency\Currency;
 use Rentalhost\VanillaData\Data;
 
 /**
@@ -16,7 +18,7 @@ class PortugueseLocale extends Locale
      */
     protected $options = [
         /** @var string[] Simple spells. Basically, spells from 1 to 900. Other spells bellow one thousand are compound. */
-        'simpleSpells'       => [
+        'simpleSpells'             => [
             1   => 'um',
             2   => 'dois',
             3   => 'três',
@@ -56,7 +58,7 @@ class PortugueseLocale extends Locale
         ],
 
         /** @var string[] Simple spells in female gender. It'll complement the base simple spells. */
-        'simpleSpellsFemale' => [
+        'simpleSpellsFemale'       => [
             1   => 'uma',
             2   => 'duas',
             100 => 'cento',
@@ -71,7 +73,7 @@ class PortugueseLocale extends Locale
         ],
 
         /** @var string[] Root of spells over millions. */
-        'millionRoots'       => [
+        'millionRoots'             => [
             'milh',
             'bilh',
             'trilh',
@@ -85,28 +87,40 @@ class PortugueseLocale extends Locale
         ],
 
         /** @var string[] Suffixes to millions numbers (singular and plural). */
-        'millionSuffixes'    => [
+        'millionSuffixes'          => [
             'ão',
             'ões',
         ],
 
         /** @var string Zero is exclusively spelled as is when number is exactly it. */
-        'zeroSpell'          => 'zero',
+        'zeroSpell'                => 'zero',
 
         /** @var string Hundred is exclusively spelled as is when number is exactly it. */
-        'hundredSpell'       => 'cem',
+        'hundredSpell'             => 'cem',
 
         /** @var string Thousand is spelled for numbers over one thousand. */
-        'thousandSpell'      => 'mil',
+        'thousandSpell'            => 'mil',
 
         /** @var string Separator used in default cases (eg. *um milhão, mil e um*). */
-        'defaultSeparator'   => ',',
+        'defaultSeparator'         => ',',
 
         /** @var string Separator used in lasts lands (eg. *mil e um*). */
-        'lastSeparator'      => 'e',
+        'lastSeparator'            => 'e',
 
         /** @var string The number gender (eg. *dois* for male or *duas* for female). */
-        'gender'             => self::GENDER_MALE,
+        'gender'                   => self::GENDER_MALE,
+
+        /** @var string The currency separator for high amount (eg. *um milhão de reais*). */
+        'currencySeparator'        => 'de',
+
+        /** @var string The currency decimal separator (eg. *um real e dois centavos*). */
+        'currencyDecimalSeparator' => 'e',
+
+        /** @var string|Currency The default currency of this locale. */
+        'defaultCurrency'          => 'real',
+
+        /** @var string|Locale The default locale to use on currency. */
+        'defaultLocale'            => 'pt',
     ];
 
     /**
@@ -128,11 +142,10 @@ class PortugueseLocale extends Locale
      * Returns the simple spelling of a number.
      *
      * @param int $number The current hundred.
-     * @param int $land   The current number land (zero-based).
      *
      * @return string|null
      */
-    public function simple($number, $land)
+    public function simple($number)
     {
         if ($number === 100) {
             // When 100, returned the hundred named.
@@ -150,7 +163,7 @@ class PortugueseLocale extends Locale
             // If number is over 100, then combine.
             return $this->options->simpleSpells[$numberString[0] . '00'] .
                    ' ' . $this->options->lastSeparator . ' ' .
-                   $this->simple((int) substr($numberString, 1), $land);
+                   $this->simple((int) substr($numberString, 1));
         }
 
         if ($number > 20) {
@@ -168,22 +181,24 @@ class PortugueseLocale extends Locale
     /**
      * Format the number lands to spelling.
      *
+     * @param Locale   $locale             The locale used to spell numbers.
      * @param string[] $numberLandsSpelled The number lands spelled.
      * @param int[]    $numberLands        The original number lands (as integer).
+     * @param string   $spellingType       The spelling type.
      *
-     * @return string|null
+     * @return null|string
      */
-    public function format($numberLandsSpelled, $numberLands)
+    public function format($locale, $numberLandsSpelled, $numberLands, $spellingType)
     {
         if (!$numberLandsSpelled) {
             // If no lands, then spells zero.
-            return $this->options->zeroSpell;
+            return $this->formatType($this->options->zeroSpell, 0, $numberLandsSpelled, Count::SIDE_INTEGER, $spellingType);
         }
 
         $numberLandsCount = count($numberLandsSpelled);
         if ($numberLandsCount === 1 && array_key_exists('0', $numberLandsSpelled)) {
             // Simple spell with only the first land (1 to 999).
-            return $numberLandsSpelled[0];
+            return $this->formatType($numberLandsSpelled[0], $numberLands[0], $numberLandsSpelled, Count::SIDE_INTEGER, $spellingType);
         }
 
         // Reprocess all lands, applying the suffixes.
@@ -211,26 +226,99 @@ class PortugueseLocale extends Locale
                 $numberLandsSpelled[$numberLandsKey] .= ' ' . $millionRoot . $millionSuffix;
                 continue;
             }
+
+            if ($numberLandsKey === -1) {
+                // Consider decimals ten times less.
+                $numberLandsSpelled[$numberLandsKey] = $locale->simple($numberLands[$numberLandsKey] / 10);
+                continue;
+            }
+        }
+
+        // Currency: if decimal was defined, so we get it first.
+        $numberLandsDecimal = null;
+        if (array_key_exists('-1', $numberLandsSpelled)) {
+            $numberLandsCount--;
+
+            $numberLandsDecimal = $this->formatType(
+                $numberLandsSpelled[-1],
+                $numberLands[-1] / 10,
+                $numberLandsSpelled,
+                Count::SIDE_DECIMAL,
+                $spellingType);
+
+            unset( $numberLands[-1], $numberLandsSpelled[-1] );
         }
 
         // If there are just one land, just return it.
+        // Currency: it's always pluralized because numbers where is always greater or equal to one thousand.
+        $numberResult = null;
         if ($numberLandsCount === 1) {
-            return array_pop($numberLandsSpelled);
+            $numberResult = $this->formatType(reset($numberLandsSpelled), 2, $numberLandsSpelled, Count::SIDE_INTEGER, $spellingType);
+        }
+        else if ($numberLandsCount > 1) {
+            // If the first land is equal or lower than 100, the result will be treated differently.
+            // Or if the first land is divisible by 100 (eg. *200*, but not *201*).
+            // In this case, it'll group the last land by *e* instead of comma.
+            $numberLandsFirst = reset($numberLands);
+            if ($numberLandsFirst <= 100 || $numberLandsFirst % 100 === 0) {
+                $numberLandsReverse = array_reverse($numberLandsSpelled);
+                $numberResult       = implode($this->options->defaultSeparator . ' ', array_slice($numberLandsReverse, 0, -1)) .
+                                      ' ' . $this->options->lastSeparator . ' ' .
+                                      end($numberLandsReverse);
+            }
+            else {
+                // Else, just implode all by comma.
+                $numberResult = implode($this->options->defaultSeparator . ' ', array_reverse($numberLandsSpelled));
+            }
+
+            // Compose the integer result.
+            $numberResult = $this->formatType($numberResult, 2, $numberLandsSpelled, Count::SIDE_INTEGER, $spellingType);
         }
 
-        // If the first land is equal or lower than 100, the result will be treated differently.
-        // Or if the first land is divisible by 100 (eg. *200*, but not *201*).
-        // In this case, it'll group the last land by *e* instead of comma.
-        $numberLandsFirst = reset($numberLands);
-        if ($numberLandsFirst <= 100 || $numberLandsFirst % 100 === 0) {
-            $numberLandsReverse = array_reverse($numberLandsSpelled);
+        // Currency: if decimals exists, just append it to result.
+        if ($numberLandsDecimal) {
+            if ($numberResult) {
+                $numberResult .= ' ' . $this->options->currencyDecimalSeparator . ' ';
+            }
 
-            return implode($this->options->defaultSeparator . ' ', array_slice($numberLandsReverse, 0, -1)) .
-                   ' ' . $this->options->lastSeparator . ' ' .
-                   end($numberLandsReverse);
+            $numberResult .= $numberLandsDecimal;
         }
 
-        // Else, just implode all by comma.
-        return implode($this->options->defaultSeparator . ' ', array_reverse($numberLandsSpelled));
+        return $numberResult;
+    }
+
+    /**
+     * Format the spelled value based on type.
+     *
+     * @param string   $spelledValue       The spelled value.
+     * @param int      $value              The value.
+     * @param string[] $numberLandsSpelled The spelled numbers.
+     * @param string   $spellingSide       The spelling part (integer or decimal).
+     * @param string   $spellingType       The spelling type.
+     *
+     * @return string
+     */
+    private function formatType($spelledValue, $value, $numberLandsSpelled, $spellingSide, $spellingType)
+    {
+        // Format currencies.
+        if ($spellingType === Count::SPELLING_CURRENCY) {
+            end($numberLandsSpelled);
+
+            $currencyLocalized = $this->getCurrency()->getLocaleCallable($this->options->defaultLocale);
+            $currencySuffix    = call_user_func($currencyLocalized, $spellingSide, $value);
+            $currencyLong      = $numberLandsSpelled &&
+                                 $spellingSide === Count::SIDE_INTEGER &&
+                                 $this->options->currencySeparator &&
+                                 !array_key_exists('0', $numberLandsSpelled) &&
+                                 !array_key_exists('1', $numberLandsSpelled) &&
+                                 key($numberLandsSpelled) >= 2;
+
+            return $spelledValue . ' ' .
+                   ( $currencyLong ? $this->options->currencySeparator . ' ' : null ) .
+                   $currencySuffix;
+        }
+
+        // Result the spelled value, only.
+        return $spelledValue;
     }
 }
