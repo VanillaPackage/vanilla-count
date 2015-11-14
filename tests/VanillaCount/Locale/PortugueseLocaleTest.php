@@ -3,6 +3,7 @@
 namespace Rentalhost\VanillaCount;
 
 use PHPUnit_Framework_TestCase;
+use Rentalhost\VanillaCount\Locale\Locale;
 use Rentalhost\VanillaCount\Locale\PortugueseLocale;
 
 /**
@@ -290,74 +291,100 @@ class PortugueseLocaleTest extends PHPUnit_Framework_TestCase
      */
     public function dataSpellWithOptions()
     {
-        $genderFemaleOptions = [ 'gender' => 'female' ];
-
         return [
-            [ $genderFemaleOptions, 0, 'zero' ],
-            [ $genderFemaleOptions, 1, 'uma' ],
-            [ $genderFemaleOptions, 2, 'duas' ],
-            [ $genderFemaleOptions, 3, 'três' ],
-            [ $genderFemaleOptions, 4, 'quatro' ],
-            [ $genderFemaleOptions, 5, 'cinco' ],
-            [ $genderFemaleOptions, 6, 'seis' ],
-            [ $genderFemaleOptions, 7, 'sete' ],
-            [ $genderFemaleOptions, 8, 'oito' ],
-            [ $genderFemaleOptions, 9, 'nove' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 0, 'zero' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1, 'uma' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 2, 'duas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 3, 'três' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 4, 'quatro' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 5, 'cinco' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 6, 'seis' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 7, 'sete' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 8, 'oito' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 9, 'nove' ],
 
-            [ $genderFemaleOptions, 10, 'dez' ],
-            [ $genderFemaleOptions, 11, 'onze' ],
-            [ $genderFemaleOptions, 12, 'doze' ],
-            [ $genderFemaleOptions, 13, 'treze' ],
-            [ $genderFemaleOptions, 14, 'quatorze' ],
-            [ $genderFemaleOptions, 15, 'quinze' ],
-            [ $genderFemaleOptions, 16, 'dezesseis' ],
-            [ $genderFemaleOptions, 17, 'dezessete' ],
-            [ $genderFemaleOptions, 18, 'dezoito' ],
-            [ $genderFemaleOptions, 19, 'dezenove' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 10, 'dez' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 11, 'onze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 12, 'doze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 13, 'treze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 14, 'quatorze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 15, 'quinze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 16, 'dezesseis' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 17, 'dezessete' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 18, 'dezoito' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 19, 'dezenove' ],
 
-            [ $genderFemaleOptions, 20, 'vinte' ],
-            [ $genderFemaleOptions, 21, 'vinte e uma' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 20, 'vinte' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 21, 'vinte e uma' ],
 
-            [ $genderFemaleOptions, 30, 'trinta' ],
-            [ $genderFemaleOptions, 40, 'quarenta' ],
-            [ $genderFemaleOptions, 50, 'cinquenta' ],
-            [ $genderFemaleOptions, 60, 'sessenta' ],
-            [ $genderFemaleOptions, 70, 'setenta' ],
-            [ $genderFemaleOptions, 80, 'oitenta' ],
-            [ $genderFemaleOptions, 90, 'noventa' ],
-            [ $genderFemaleOptions, 100, 'cem' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 30, 'trinta' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 40, 'quarenta' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 50, 'cinquenta' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 60, 'sessenta' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 70, 'setenta' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 80, 'oitenta' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 90, 'noventa' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 100, 'cem' ],
 
-            [ $genderFemaleOptions, 101, 'cento e uma' ],
-            [ $genderFemaleOptions, 110, 'cento e dez' ],
-            [ $genderFemaleOptions, 111, 'cento e onze' ],
-            [ $genderFemaleOptions, 121, 'cento e vinte e uma' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 101, 'cento e uma' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 110, 'cento e dez' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 111, 'cento e onze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 121, 'cento e vinte e uma' ],
 
-            [ $genderFemaleOptions, 200, 'duzentas' ],
-            [ $genderFemaleOptions, 300, 'trezentas' ],
-            [ $genderFemaleOptions, 400, 'quatrocentas' ],
-            [ $genderFemaleOptions, 500, 'quinhentas' ],
-            [ $genderFemaleOptions, 600, 'seiscentas' ],
-            [ $genderFemaleOptions, 700, 'setecentas' ],
-            [ $genderFemaleOptions, 800, 'oitocentas' ],
-            [ $genderFemaleOptions, 900, 'novecentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 200, 'duzentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 300, 'trezentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 400, 'quatrocentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 500, 'quinhentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 600, 'seiscentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 700, 'setecentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 800, 'oitocentas' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 900, 'novecentas' ],
 
-            [ $genderFemaleOptions, 1000, 'mil' ],
-            [ $genderFemaleOptions, 1001, 'mil e uma' ],
-            [ $genderFemaleOptions, 1010, 'mil e dez' ],
-            [ $genderFemaleOptions, 1011, 'mil e onze' ],
-            [ $genderFemaleOptions, 1021, 'mil e vinte e uma' ],
-            [ $genderFemaleOptions, 1100, 'mil e cem' ],
-            [ $genderFemaleOptions, 1101, 'mil, cento e uma' ],
-            [ $genderFemaleOptions, 1111, 'mil, cento e onze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1000, 'mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1001, 'mil e uma' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1010, 'mil e dez' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1011, 'mil e onze' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1021, 'mil e vinte e uma' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1100, 'mil e cem' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1101, 'mil, cento e uma' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 1111, 'mil, cento e onze' ],
 
-            [ $genderFemaleOptions, 2000, 'duas mil' ],
-            [ $genderFemaleOptions, 3000, 'três mil' ],
-            [ $genderFemaleOptions, 4000, 'quatro mil' ],
-            [ $genderFemaleOptions, 5000, 'cinco mil' ],
-            [ $genderFemaleOptions, 6000, 'seis mil' ],
-            [ $genderFemaleOptions, 7000, 'sete mil' ],
-            [ $genderFemaleOptions, 8000, 'oito mil' ],
-            [ $genderFemaleOptions, 9000, 'nove mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 2000, 'duas mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 3000, 'três mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 4000, 'quatro mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 5000, 'cinco mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 6000, 'seis mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 7000, 'sete mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 8000, 'oito mil' ],
+            [ [ 'gender' => Locale::GENDER_FEMALE ], 9000, 'nove mil' ],
+
+            [ [ 'simpleSpells' => [ 1 => 'one' ] ], 1, 'one' ],
+            [ [ 'simpleSpells' => [ ] ], 2, 'zero' ],
+
+            [
+                [
+                    'simpleSpellsFemale' => [ 1 => 'UMA' ],
+                    'gender'             => Locale::GENDER_FEMALE,
+                ],
+                1001,
+                'mil e UMA',
+            ],
+
+            [
+                [
+                    'millionRoots'    => [ 'MILH' ],
+                    'millionSuffixes' => [ 'ÃO', 'ÕES' ],
+                ],
+                1000000,
+                'um MILHÃO',
+            ],
+
+            [ [ 'zeroSpell' => 'nenhum' ], 0, 'nenhum' ],
+            [ [ 'hundredSpell' => 'CEM' ], 100, 'CEM' ],
+            [ [ 'thousandSpell' => 'MIL' ], 1000, 'MIL' ],
+
+            [ [ 'defaultSeparator' => null ], 1001001, 'um milhão mil e um' ],
+            [ [ 'lastSeparator' => 'and' ], 1001001, 'um milhão, mil and um' ],
         ];
     }
 }

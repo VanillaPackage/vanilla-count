@@ -13,72 +13,100 @@ class PortugueseLocale extends Locale
     /**
      * Locale options.
      * @var array
-     *
-     * @param string $gender The number gender (eg. *dois* for male or *duas* for female).
      */
     protected $options = [
-        'gender' => 'male',
-    ];
+        /** @var string[] Simple spells. Basically, spells from 1 to 900. Other spells bellow one thousand are compound. */
+        'simpleSpells'       => [
+            1   => 'um',
+            2   => 'dois',
+            3   => 'três',
+            4   => 'quatro',
+            5   => 'cinco',
+            6   => 'seis',
+            7   => 'sete',
+            8   => 'oito',
+            9   => 'nove',
+            10  => 'dez',
+            11  => 'onze',
+            12  => 'doze',
+            13  => 'treze',
+            14  => 'quatorze',
+            15  => 'quinze',
+            16  => 'dezesseis',
+            17  => 'dezessete',
+            18  => 'dezoito',
+            19  => 'dezenove',
+            20  => 'vinte',
+            30  => 'trinta',
+            40  => 'quarenta',
+            50  => 'cinquenta',
+            60  => 'sessenta',
+            70  => 'setenta',
+            80  => 'oitenta',
+            90  => 'noventa',
+            100 => 'cento',
+            200 => 'duzentos',
+            300 => 'trezentos',
+            400 => 'quatrocentos',
+            500 => 'quinhentos',
+            600 => 'seiscentos',
+            700 => 'setecentos',
+            800 => 'oitocentos',
+            900 => 'novecentos',
+        ],
 
-    /**
-     * Named numbers.
-     * @var string[]
-     */
-    private $simpleSpells = [
-        1   => 'um',
-        2   => 'dois',
-        3   => 'três',
-        4   => 'quatro',
-        5   => 'cinco',
-        6   => 'seis',
-        7   => 'sete',
-        8   => 'oito',
-        9   => 'nove',
-        10  => 'dez',
-        11  => 'onze',
-        12  => 'doze',
-        13  => 'treze',
-        14  => 'quatorze',
-        15  => 'quinze',
-        16  => 'dezesseis',
-        17  => 'dezessete',
-        18  => 'dezoito',
-        19  => 'dezenove',
-        20  => 'vinte',
-        30  => 'trinta',
-        40  => 'quarenta',
-        50  => 'cinquenta',
-        60  => 'sessenta',
-        70  => 'setenta',
-        80  => 'oitenta',
-        90  => 'noventa',
-        100 => 'cento',
-        200 => 'duzentos',
-        300 => 'trezentos',
-        400 => 'quatrocentos',
-        500 => 'quinhentos',
-        600 => 'seiscentos',
-        700 => 'setecentos',
-        800 => 'oitocentos',
-        900 => 'novecentos',
-    ];
+        /** @var string[] Simple spells in female gender. It'll complement the base simple spells. */
+        'simpleSpellsFemale' => [
+            1   => 'uma',
+            2   => 'duas',
+            100 => 'cento',
+            200 => 'duzentas',
+            300 => 'trezentas',
+            400 => 'quatrocentas',
+            500 => 'quinhentas',
+            600 => 'seiscentas',
+            700 => 'setecentas',
+            800 => 'oitocentas',
+            900 => 'novecentas',
+        ],
 
-    /**
-     * Named numbers for female gender.
-     * @var string[]
-     */
-    static private $simpleSpellsFemale = [
-        1   => 'uma',
-        2   => 'duas',
-        100 => 'cento',
-        200 => 'duzentas',
-        300 => 'trezentas',
-        400 => 'quatrocentas',
-        500 => 'quinhentas',
-        600 => 'seiscentas',
-        700 => 'setecentas',
-        800 => 'oitocentas',
-        900 => 'novecentas',
+        /** @var string[] Root of spells over millions. */
+        'millionRoots'       => [
+            'milh',
+            'bilh',
+            'trilh',
+            'quatrilh',
+            'quintilh',
+            'sextilh',
+            'septilh',
+            'octilh',
+            'nonilh',
+            'decilh',
+        ],
+
+        /** @var string[] Suffixes to millions numbers (singular and plural). */
+        'millionSuffixes'    => [
+            'ão',
+            'ões',
+        ],
+
+        /** @var string Zero is exclusively spelled as is when number is exactly it. */
+        'zeroSpell'          => 'zero',
+
+        /** @var string Hundred is exclusively spelled as is when number is exactly it. */
+        'hundredSpell'       => 'cem',
+
+        /** @var string Thousand is spelled for numbers over one thousand. */
+        'thousandSpell'      => 'mil',
+
+        /** @var string Separator used in default cases (eg. *um milhão, mil e um*). */
+        'defaultSeparator'   => ',',
+
+        /** @var string Separator used in lasts lands (eg. *mil e um*). */
+        'lastSeparator'      => 'e',
+
+        /** @var string The number gender (eg. *dois* for male or *duas* for female). */
+        'gender'             => self::GENDER_MALE,
     ];
 
     /**
@@ -92,65 +120,9 @@ class PortugueseLocale extends Locale
 
         if ($this->options->gender === static::GENDER_FEMALE) {
             // Apply the female gender to simple spells.
-            $this->simpleSpells = array_replace($this->simpleSpells, static::$simpleSpellsFemale);
+            $this->options->simpleSpells = array_replace($this->options->simpleSpells, $this->options->simpleSpellsFemale);
         }
     }
-
-    /**
-     * Root of spells over millions.
-     * @var string[]
-     */
-    static private $millionRoots = [
-        'milh',
-        'bilh',
-        'trilh',
-        'quatrilh',
-        'quintilh',
-        'sextilh',
-        'septilh',
-        'octilh',
-        'nonilh',
-        'decilh',
-    ];
-
-    /**
-     * Suffixes to millions numbers (singular and plural).
-     * @var string[]
-     */
-    static private $millionSuffixes = [
-        'ão',
-        'ões',
-    ];
-
-    /**
-     * Zero is exclusively spelled as is when number is exactly it.
-     * @var string
-     */
-    static private $zeroSpell = 'zero';
-
-    /**
-     * Hundred is exclusively spelled as is when number is exactly it.
-     * @var string
-     */
-    static private $hundredSpell = 'cem';
-
-    /**
-     * Thousand is spelled for numbers over one thousand.
-     * @var string
-     */
-    static private $thousandSpell = 'mil';
-
-    /**
-     * Separator used in default cases (eg. *um milhão, mil e um*).
-     * @var string
-     */
-    static private $defaultSeparator = ', ';
-
-    /**
-     * Separator used in lasts lands (eg. *mil e um*).
-     * @var string
-     */
-    static private $lastSeparator = ' e ';
 
     /**
      * Returns the simple spelling of a number.
@@ -164,30 +136,30 @@ class PortugueseLocale extends Locale
     {
         if ($number === 100) {
             // When 100, returned the hundred named.
-            return static::$hundredSpell;
+            return $this->options->hundredSpell;
         }
 
-        if (array_key_exists($number, $this->simpleSpells)) {
+        if (array_key_exists($number, $this->options->simpleSpells)) {
             // If locale was defined directly, so use that.
-            return $this->simpleSpells[$number];
+            return $this->options->simpleSpells[$number];
         }
 
         if ($number > 100) {
             $numberString = (string) $number;
 
             // If number is over 100, then combine.
-            return $this->simpleSpells[$numberString[0] . '00'] .
-                   static::$lastSeparator .
-                   static::simple((int) substr($numberString, 1), $land);
+            return $this->options->simpleSpells[$numberString[0] . '00'] .
+                   ' ' . $this->options->lastSeparator . ' ' .
+                   $this->simple((int) substr($numberString, 1), $land);
         }
 
         if ($number > 20) {
             $numberString = (string) $number;
 
             // If number is over 20, then combine that.
-            return $this->simpleSpells[$numberString[0] . '0'] .
-                   static::$lastSeparator .
-                   $this->simpleSpells[$numberString[1]];
+            return $this->options->simpleSpells[$numberString[0] . '0'] .
+                   ' ' . $this->options->lastSeparator . ' ' .
+                   $this->options->simpleSpells[$numberString[1]];
         }
 
         return null;
@@ -205,7 +177,7 @@ class PortugueseLocale extends Locale
     {
         if (!$numberLandsSpelled) {
             // If no lands, then spells zero.
-            return static::$zeroSpell;
+            return $this->options->zeroSpell;
         }
 
         $numberLandsCount = count($numberLandsSpelled);
@@ -220,12 +192,12 @@ class PortugueseLocale extends Locale
             if ($numberLandsKey === 1) {
                 if ($numberLands[$numberLandsKey] === 1) {
                     // Exclusively for the one thousand, just use suffix (*um mil* to *mil*).
-                    $numberLandsSpelled[$numberLandsKey] = static::$thousandSpell;
+                    $numberLandsSpelled[$numberLandsKey] = $this->options->thousandSpell;
                     continue;
                 }
 
                 // Else, just append the thousand suffix (*dois* to *dois mil*).
-                $numberLandsSpelled[$numberLandsKey] .= ' ' . static::$thousandSpell;
+                $numberLandsSpelled[$numberLandsKey] .= ' ' . $this->options->thousandSpell;
                 continue;
             }
 
@@ -233,8 +205,8 @@ class PortugueseLocale extends Locale
                 // Numbers over one million.
                 // Stores the million root (eg. *milh*) and the million suffix (eg. *ões*).
                 // Together it'll be *milhões* if number is over 2 millions.
-                $millionRoot   = static::$millionRoots[$numberLandsKey - 2];
-                $millionSuffix = static::$millionSuffixes[$numberLands[$numberLandsKey] >= 2];
+                $millionRoot   = $this->options->millionRoots[$numberLandsKey - 2];
+                $millionSuffix = $this->options->millionSuffixes[$numberLands[$numberLandsKey] >= 2];
 
                 $numberLandsSpelled[$numberLandsKey] .= ' ' . $millionRoot . $millionSuffix;
                 continue;
@@ -253,12 +225,12 @@ class PortugueseLocale extends Locale
         if ($numberLandsFirst <= 100 || $numberLandsFirst % 100 === 0) {
             $numberLandsReverse = array_reverse($numberLandsSpelled);
 
-            return implode(static::$defaultSeparator, array_slice($numberLandsReverse, 0, -1)) .
-                   static::$lastSeparator .
+            return implode($this->options->defaultSeparator . ' ', array_slice($numberLandsReverse, 0, -1)) .
+                   ' ' . $this->options->lastSeparator . ' ' .
                    end($numberLandsReverse);
         }
 
         // Else, just implode all by comma.
-        return implode(static::$defaultSeparator, array_reverse($numberLandsSpelled));
+        return implode($this->options->defaultSeparator . ' ', array_reverse($numberLandsSpelled));
     }
 }
