@@ -2,12 +2,36 @@
 
 namespace Rentalhost\VanillaCount\Locale;
 
+use Rentalhost\VanillaData\Data;
+
 /**
  * Class eLocale
  * @package Rentalhost\VanillaCount
  */
 abstract class Locale
 {
+    /**
+     * Gender constants.
+     */
+    const GENDER_MALE = 'male';
+    const GENDER_FEMALE = 'female';
+
+    /**
+     * Locale options.
+     * @var Data
+     */
+    protected $options;
+
+    /**
+     * Locale constructor.
+     *
+     * @param Data|array|null $options Options to locale.
+     */
+    public function __construct($options = null)
+    {
+        $this->options = Data::extend($this->options, $options);
+    }
+
     /**
      * Returns the simple spelling of a number.
      *

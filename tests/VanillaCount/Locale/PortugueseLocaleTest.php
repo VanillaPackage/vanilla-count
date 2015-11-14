@@ -268,4 +268,96 @@ class PortugueseLocaleTest extends PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * Test number spelling with options.
+     *
+     * @param array  $options  Options to spelling.
+     * @param int    $number   Number to spelling.
+     * @param string $expected Spelling expected.
+     *
+     * @dataProvider dataSpellWithOptions
+     */
+    public function testSpellWithOptions($options, $number, $expected)
+    {
+        $count = new Count(new PortugueseLocale($options));
+
+        static::assertSame($expected, $count->spell($number));
+    }
+
+    /**
+     * Data provider.
+     */
+    public function dataSpellWithOptions()
+    {
+        $genderFemaleOptions = [ 'gender' => 'female' ];
+
+        return [
+            [ $genderFemaleOptions, 0, 'zero' ],
+            [ $genderFemaleOptions, 1, 'uma' ],
+            [ $genderFemaleOptions, 2, 'duas' ],
+            [ $genderFemaleOptions, 3, 'três' ],
+            [ $genderFemaleOptions, 4, 'quatro' ],
+            [ $genderFemaleOptions, 5, 'cinco' ],
+            [ $genderFemaleOptions, 6, 'seis' ],
+            [ $genderFemaleOptions, 7, 'sete' ],
+            [ $genderFemaleOptions, 8, 'oito' ],
+            [ $genderFemaleOptions, 9, 'nove' ],
+
+            [ $genderFemaleOptions, 10, 'dez' ],
+            [ $genderFemaleOptions, 11, 'onze' ],
+            [ $genderFemaleOptions, 12, 'doze' ],
+            [ $genderFemaleOptions, 13, 'treze' ],
+            [ $genderFemaleOptions, 14, 'quatorze' ],
+            [ $genderFemaleOptions, 15, 'quinze' ],
+            [ $genderFemaleOptions, 16, 'dezesseis' ],
+            [ $genderFemaleOptions, 17, 'dezessete' ],
+            [ $genderFemaleOptions, 18, 'dezoito' ],
+            [ $genderFemaleOptions, 19, 'dezenove' ],
+
+            [ $genderFemaleOptions, 20, 'vinte' ],
+            [ $genderFemaleOptions, 21, 'vinte e uma' ],
+
+            [ $genderFemaleOptions, 30, 'trinta' ],
+            [ $genderFemaleOptions, 40, 'quarenta' ],
+            [ $genderFemaleOptions, 50, 'cinquenta' ],
+            [ $genderFemaleOptions, 60, 'sessenta' ],
+            [ $genderFemaleOptions, 70, 'setenta' ],
+            [ $genderFemaleOptions, 80, 'oitenta' ],
+            [ $genderFemaleOptions, 90, 'noventa' ],
+            [ $genderFemaleOptions, 100, 'cem' ],
+
+            [ $genderFemaleOptions, 101, 'cento e uma' ],
+            [ $genderFemaleOptions, 110, 'cento e dez' ],
+            [ $genderFemaleOptions, 111, 'cento e onze' ],
+            [ $genderFemaleOptions, 121, 'cento e vinte e uma' ],
+
+            [ $genderFemaleOptions, 200, 'duzentas' ],
+            [ $genderFemaleOptions, 300, 'trezentas' ],
+            [ $genderFemaleOptions, 400, 'quatrocentas' ],
+            [ $genderFemaleOptions, 500, 'quinhentas' ],
+            [ $genderFemaleOptions, 600, 'seiscentas' ],
+            [ $genderFemaleOptions, 700, 'setecentas' ],
+            [ $genderFemaleOptions, 800, 'oitocentas' ],
+            [ $genderFemaleOptions, 900, 'novecentas' ],
+
+            [ $genderFemaleOptions, 1000, 'mil' ],
+            [ $genderFemaleOptions, 1001, 'mil e uma' ],
+            [ $genderFemaleOptions, 1010, 'mil e dez' ],
+            [ $genderFemaleOptions, 1011, 'mil e onze' ],
+            [ $genderFemaleOptions, 1021, 'mil e vinte e uma' ],
+            [ $genderFemaleOptions, 1100, 'mil e cem' ],
+            [ $genderFemaleOptions, 1101, 'mil, cento e uma' ],
+            [ $genderFemaleOptions, 1111, 'mil, cento e onze' ],
+
+            [ $genderFemaleOptions, 2000, 'duas mil' ],
+            [ $genderFemaleOptions, 3000, 'três mil' ],
+            [ $genderFemaleOptions, 4000, 'quatro mil' ],
+            [ $genderFemaleOptions, 5000, 'cinco mil' ],
+            [ $genderFemaleOptions, 6000, 'seis mil' ],
+            [ $genderFemaleOptions, 7000, 'sete mil' ],
+            [ $genderFemaleOptions, 8000, 'oito mil' ],
+            [ $genderFemaleOptions, 9000, 'nove mil' ],
+        ];
+    }
 }

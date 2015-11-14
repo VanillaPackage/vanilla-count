@@ -2,6 +2,8 @@
 
 namespace Rentalhost\VanillaCount\Locale;
 
+use Rentalhost\VanillaData\Data;
+
 /**
  * Class PortugueseLocale
  * @package Rentalhost\VanillaCount
@@ -9,10 +11,20 @@ namespace Rentalhost\VanillaCount\Locale;
 class PortugueseLocale extends Locale
 {
     /**
+     * Locale options.
+     * @var array
+     *
+     * @param string $gender The number gender (eg. *dois* for male or *duas* for female).
+     */
+    protected $options = [
+        'gender' => 'male',
+    ];
+
+    /**
      * Named numbers.
      * @var string[]
      */
-    static private $simpleSpells = [
+    private $simpleSpells = [
         1   => 'um',
         2   => 'dois',
         3   => 'três',
@@ -50,6 +62,39 @@ class PortugueseLocale extends Locale
         800 => 'oitocentos',
         900 => 'novecentos',
     ];
+
+    /**
+     * Named numbers for female gender.
+     * @var string[]
+     */
+    static private $simpleSpellsFemale = [
+        1   => 'uma',
+        2   => 'duas',
+        100 => 'cento',
+        200 => 'duzentas',
+        300 => 'trezentas',
+        400 => 'quatrocentas',
+        500 => 'quinhentas',
+        600 => 'seiscentas',
+        700 => 'setecentas',
+        800 => 'oitocentas',
+        900 => 'novecentas',
+    ];
+
+    /**
+     * Locale constructor.
+     *
+     * @param Data|array|null $options Options to locale.
+     */
+    public function __construct($options = null)
+    {
+        parent::__construct($options);
+
+        if ($this->options->gender === static::GENDER_FEMALE) {
+            // Apply the female gender to simple spells.
+            $this->simpleSpells = array_replace($this->simpleSpells, static::$simpleSpellsFemale);
+        }
+    }
 
     /**
      * Root of spells over millions.
@@ -122,16 +167,16 @@ class PortugueseLocale extends Locale
             return static::$hundredSpell;
         }
 
-        if (array_key_exists($number, static::$simpleSpells)) {
+        if (array_key_exists($number, $this->simpleSpells)) {
             // If locale was defined directly, so use that.
-            return static::$simpleSpells[$number];
+            return $this->simpleSpells[$number];
         }
 
         if ($number > 100) {
             $numberString = (string) $number;
 
             // If number is over 100, then combine.
-            return static::$simpleSpells[$numberString[0] . '00'] .
+            return $this->simpleSpells[$numberString[0] . '00'] .
                    static::$lastSeparator .
                    static::simple((int) substr($numberString, 1), $land);
         }
@@ -140,9 +185,9 @@ class PortugueseLocale extends Locale
             $numberString = (string) $number;
 
             // If number is over 20, then combine that.
-            return static::$simpleSpells[$numberString[0] . '0'] .
+            return $this->simpleSpells[$numberString[0] . '0'] .
                    static::$lastSeparator .
-                   static::$simpleSpells[$numberString[1]];
+                   $this->simpleSpells[$numberString[1]];
         }
 
         return null;
