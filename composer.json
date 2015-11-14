@@ -1,0 +1,22 @@
+{
+    "name": "rentalhost/vanilla-count",
+    "description": "The vanilla-count will help you to get the number sentence from a numberic value.",
+
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Rentalhost\\VanillaCount\\": "src/VanillaCount/"
+        }
+    },
+
+    "authors": [
+        {
+            "name": "David Rodrigues",
+            "email": "david.rodrigues@rentalhost.net"
+        }
+    ],
+    "license": "MIT"
+}
