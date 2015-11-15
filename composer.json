@@ -1,6 +1,6 @@
 {
     "name": "rentalhost/vanilla-count",
-    "description": "The vanilla-count will help you to get the number sentence from a numberic value.",
+    "description": "The vanilla-count will help you to get the number spelling from a numberic value.",
 
     "require": {
         "rentalhost/vanilla-data": "<0.2"
