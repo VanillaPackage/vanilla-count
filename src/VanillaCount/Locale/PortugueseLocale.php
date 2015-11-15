@@ -105,19 +105,19 @@ class PortugueseLocale extends Locale
         'thousandSpell'            => 'mil',
 
         /** @var string Separator used in default cases (eg. *um milhão, mil e um*). */
-        'defaultSeparator'         => ',',
+        'defaultSeparator'         => ', ',
 
         /** @var string Separator used in lasts lands (eg. *mil e um*). */
-        'lastSeparator'            => 'e',
+        'lastSeparator'            => ' e ',
 
         /** @var string The number gender (eg. *dois* for male or *duas* for female). */
         'gender'                   => self::GENDER_MALE,
 
         /** @var string The currency separator for high amount (eg. *um milhão de reais*). */
-        'currencySeparator'        => 'de',
+        'currencySeparator'        => ' de ',
 
         /** @var string The currency decimal separator (eg. *um real e dois centavos*). */
-        'currencyDecimalSeparator' => 'e',
+        'currencyDecimalSeparator' => ' e ',
 
         /** @var string|Currency The default currency of this locale. */
         'defaultCurrency'          => 'real',
@@ -165,7 +165,7 @@ class PortugueseLocale extends Locale
 
             // If number is over 100, then combine.
             return $this->options->simpleSpells[$numberString[0] . '00'] .
-                   ' ' . $this->options->lastSeparator . ' ' .
+                   ( $this->options->lastSeparator ?: ' ' ) .
                    $this->simple((int) substr($numberString, 1));
         }
 
@@ -174,7 +174,7 @@ class PortugueseLocale extends Locale
 
             // If number is over 20, then combine that.
             return $this->options->simpleSpells[$numberString[0] . '0'] .
-                   ' ' . $this->options->lastSeparator . ' ' .
+                   ( $this->options->lastSeparator ?: ' ' ) .
                    $this->options->simpleSpells[$numberString[1]];
         }
 
@@ -265,13 +265,13 @@ class PortugueseLocale extends Locale
             $numberLandsFirst = reset($numberLands);
             if ($numberLandsFirst <= 100 || $numberLandsFirst % 100 === 0) {
                 $numberLandsReverse = array_reverse($numberLandsSpelled);
-                $numberResult       = implode($this->options->defaultSeparator . ' ', array_slice($numberLandsReverse, 0, -1)) .
-                                      ' ' . $this->options->lastSeparator . ' ' .
+                $numberResult       = implode($this->options->defaultSeparator ?: ' ', array_slice($numberLandsReverse, 0, -1)) .
+                                      ( $this->options->lastSeparator ?: ' ' ) .
                                       end($numberLandsReverse);
             }
             else {
                 // Else, just implode all by comma.
-                $numberResult = implode($this->options->defaultSeparator . ' ', array_reverse($numberLandsSpelled));
+                $numberResult = implode($this->options->defaultSeparator ?: ' ', array_reverse($numberLandsSpelled));
             }
 
             // Compose the integer result.
@@ -281,7 +281,7 @@ class PortugueseLocale extends Locale
         // Currency: if decimals exists, just append it to result.
         if ($numberLandsDecimal) {
             if ($numberResult) {
-                $numberResult .= ' ' . $this->options->currencyDecimalSeparator . ' ';
+                $numberResult .= $this->options->currencyDecimalSeparator;
             }
 
             $numberResult .= $numberLandsDecimal;
@@ -316,8 +316,8 @@ class PortugueseLocale extends Locale
                                  !array_key_exists('1', $numberLandsSpelled) &&
                                  key($numberLandsSpelled) >= 2;
 
-            return $spelledValue . ' ' .
-                   ( $currencyLong ? $this->options->currencySeparator . ' ' : null ) .
+            return $spelledValue .
+                   ( $currencyLong ? $this->options->currencySeparator : ' ' ) .
                    $currencySuffix;
         }
 
