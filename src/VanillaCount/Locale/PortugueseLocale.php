@@ -92,6 +92,9 @@ class PortugueseLocale extends Locale
             'ões',
         ],
 
+        /** @var boolean Include the *um* to thousand (eg. *um mil* instead of *mil*). */
+        'includeOneThousand'       => false,
+
         /** @var string Zero is exclusively spelled as is when number is exactly it. */
         'zeroSpell'                => 'zero',
 
@@ -205,7 +208,7 @@ class PortugueseLocale extends Locale
         $numberLandsKeys = array_keys($numberLandsSpelled);
         foreach ($numberLandsKeys as $numberLandsKey) {
             if ($numberLandsKey === 1) {
-                if ($numberLands[$numberLandsKey] === 1) {
+                if ($this->options->includeOneThousand !== true && $numberLands[$numberLandsKey] === 1) {
                     // Exclusively for the one thousand, just use suffix (*um mil* to *mil*).
                     $numberLandsSpelled[$numberLandsKey] = $this->options->thousandSpell;
                     continue;

@@ -394,6 +394,8 @@ class PortugueseLocaleTest extends TestCase
 
             [ [ 'defaultSeparator' => null ], 1001001, 'um milhão mil e um' ],
             [ [ 'lastSeparator' => 'and' ], 1001001, 'um milhão, mil and um' ],
+
+            [ [ 'includeOneThousand' => true ], 1001001, 'um milhão, um mil e um' ],
         ];
     }
 
