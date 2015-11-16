@@ -58,12 +58,12 @@ abstract class Locale
 
     /**
      * Returns the currency instance.
-     * @throws CurrencyUnsupportedException If the defaultCurrency option contains an unsupported value.
+     * @throws CurrencyUnsupportedException If the currency option contains an unsupported value.
      * @return Currency
      */
     protected function getCurrency()
     {
-        $currency = $this->options->defaultCurrency;
+        $currency = $this->options->currency;
 
         if (is_object($currency)) {
             // If currency is an instance of Currency, then use it directly.

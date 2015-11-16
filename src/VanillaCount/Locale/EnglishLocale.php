@@ -90,10 +90,10 @@ class EnglishLocale extends Locale
         'currencyDecimalSeparator' => ' and ',
 
         /** @var string|Currency The default currency of this locale. */
-        'defaultCurrency'          => 'dollar',
-
+        'currency'                 => 'dollar',
+        
         /** @var string|Locale The default locale to use on currency. */
-        'defaultLocale'            => 'en',
+        'currencyLocale'           => 'en',
     ];
 
     /**
@@ -269,7 +269,7 @@ class EnglishLocale extends Locale
         if ($spellingType === Count::SPELLING_CURRENCY) {
             end($numberLandsSpelled);
 
-            $currencyLocalized = $this->getCurrency()->getLocaleCallable($this->options->defaultLocale);
+            $currencyLocalized = $this->getCurrency()->getLocaleCallable($this->options->currencyLocale);
             $currencySuffix    = call_user_func($currencyLocalized, $spellingSide, $value);
             $currencyLong      = $numberLandsSpelled &&
                                  $spellingSide === Count::SIDE_INTEGER &&

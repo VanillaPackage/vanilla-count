@@ -26,12 +26,12 @@ class RealCurrencyTest extends TestCase
         static::assertSame('um real', $count->spell(1, Count::SPELLING_CURRENCY));
         static::assertSame('dois reais', $count->spell(2, Count::SPELLING_CURRENCY));
 
-        $count = new Count(new PortugueseLocale([ 'defaultLocale' => 'en' ]));
+        $count = new Count(new PortugueseLocale([ 'currencyLocale' => 'en' ]));
 
         static::assertSame('um real', $count->spell(1, Count::SPELLING_CURRENCY));
         static::assertSame('dois reais', $count->spell(2, Count::SPELLING_CURRENCY));
 
-        $count = new Count(new PortugueseLocale([ 'defaultLocale' => 'es' ]));
+        $count = new Count(new PortugueseLocale([ 'currencyLocale' => 'es' ]));
 
         static::assertSame('um real', $count->spell(1, Count::SPELLING_CURRENCY));
         static::assertSame('dois reais', $count->spell(2, Count::SPELLING_CURRENCY));

@@ -120,10 +120,10 @@ class PortugueseLocale extends Locale
         'currencyDecimalSeparator' => ' e ',
 
         /** @var string|Currency The default currency of this locale. */
-        'defaultCurrency'          => 'real',
+        'currency'                 => 'real',
 
         /** @var string|Locale The default locale to use on currency. */
-        'defaultLocale'            => 'pt',
+        'currencyLocale'           => 'pt',
     ];
 
     /**
@@ -307,7 +307,7 @@ class PortugueseLocale extends Locale
         if ($spellingType === Count::SPELLING_CURRENCY) {
             end($numberLandsSpelled);
 
-            $currencyLocalized = $this->getCurrency()->getLocaleCallable($this->options->defaultLocale);
+            $currencyLocalized = $this->getCurrency()->getLocaleCallable($this->options->currencyLocale);
             $currencySuffix    = call_user_func($currencyLocalized, $spellingSide, $value);
             $currencyLong      = $numberLandsSpelled &&
                                  $spellingSide === Count::SIDE_INTEGER &&

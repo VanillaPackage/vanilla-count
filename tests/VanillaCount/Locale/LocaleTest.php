@@ -13,13 +13,13 @@ use Rentalhost\VanillaCount\Locale\PortugueseLocale;
 class LocaleTest extends TestCase
 {
     /**
-     * Call getCurrency passing the defaultCurrency option.
+     * Call getCurrency passing the currency option.
      *
-     * @param string|RealCurrency $defaultCurrencyOption The value to test load.
+     * @param string|RealCurrency $currencyOption The value to test load.
      */
-    static private function callGetCurrency($defaultCurrencyOption)
+    static private function callGetCurrency($currencyOption)
     {
-        $locale = new PortugueseLocale([ 'defaultCurrency' => $defaultCurrencyOption ]);
+        $locale = new PortugueseLocale([ 'currency' => $currencyOption ]);
 
         static::assertInstanceOf(RealCurrency::class, static::invokeMethod($locale, 'getCurrency'));
     }
@@ -27,16 +27,16 @@ class LocaleTest extends TestCase
     /**
      * Test load currency by prebuild string classes, class names or instance.
      *
-     * @param string|RealCurrency $defaultCurrencyOption The value to test load.
+     * @param string|RealCurrency $currencyOption The value to test load.
      *
      * @covers       \Rentalhost\VanillaCount\Locale\Locale::__construct
      * @covers       \Rentalhost\VanillaCount\Locale\Locale::getCurrency
      *
      * @dataProvider dataCurrencyValids
      */
-    public function testCurrencyValids($defaultCurrencyOption)
+    public function testCurrencyValids($currencyOption)
     {
-        static::callGetCurrency($defaultCurrencyOption);
+        static::callGetCurrency($currencyOption);
     }
 
     /**
@@ -54,16 +54,16 @@ class LocaleTest extends TestCase
     /**
      * Test load an unsupported currency.
      *
-     * @param string|RealCurrency $defaultCurrencyOption The value to test load.
+     * @param string|RealCurrency $currencyOption The value to test load.
      *
      * @covers       \Rentalhost\VanillaCount\Locale\Locale::getCurrency
      *
      * @dataProvider dataCurrencyUnsupportedException
      * @expectedException \Rentalhost\VanillaCount\Exception\CurrencyUnsupportedException
      */
-    public function testCurrencyUnsupportedException($defaultCurrencyOption)
+    public function testCurrencyUnsupportedException($currencyOption)
     {
-        static::callGetCurrency($defaultCurrencyOption);
+        static::callGetCurrency($currencyOption);
     }
 
     /**

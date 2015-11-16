@@ -21,17 +21,17 @@ class DollarCurrencyTest extends TestCase
     {
         static::writeAttribute(DollarCurrency::class, 'instances', [ ]);
 
-        $count = new Count(new PortugueseLocale([ 'defaultCurrency' => DollarCurrency::class ]));
+        $count = new Count(new PortugueseLocale([ 'currency' => DollarCurrency::class ]));
 
         static::assertSame('um dólar', $count->spell(1, Count::SPELLING_CURRENCY));
         static::assertSame('dois dólares', $count->spell(2, Count::SPELLING_CURRENCY));
 
-        $count = new Count(new PortugueseLocale([ 'defaultCurrency' => DollarCurrency::class, 'defaultLocale' => 'en' ]));
+        $count = new Count(new PortugueseLocale([ 'currency' => DollarCurrency::class, 'currencyLocale' => 'en' ]));
 
         static::assertSame('um dollar', $count->spell(1, Count::SPELLING_CURRENCY));
         static::assertSame('dois dollars', $count->spell(2, Count::SPELLING_CURRENCY));
 
-        $count = new Count(new PortugueseLocale([ 'defaultCurrency' => DollarCurrency::class, 'defaultLocale' => 'es' ]));
+        $count = new Count(new PortugueseLocale([ 'currency' => DollarCurrency::class, 'currencyLocale' => 'es' ]));
 
         static::assertSame('um dólar', $count->spell(1, Count::SPELLING_CURRENCY));
         static::assertSame('dois dólares', $count->spell(2, Count::SPELLING_CURRENCY));

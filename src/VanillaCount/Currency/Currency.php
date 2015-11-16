@@ -182,7 +182,6 @@ abstract class Currency
      */
     private function getLocalesOrdered($mainLocale, $alternativeLocales)
     {
-
         // Prepare the callable possibilities.
         $locales = [ $this->defaultLocales ];
 
