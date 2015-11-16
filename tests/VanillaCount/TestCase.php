@@ -22,7 +22,7 @@ class TestCase extends PHPUnit_Framework_TestCase
      *
      * @return mixed
      */
-    public function invokeMethod($object, $methodName, $parameters = null)
+    public static function invokeMethod($object, $methodName, $parameters = null)
     {
         $objectReflection = new ReflectionClass($object);
 
@@ -39,7 +39,7 @@ class TestCase extends PHPUnit_Framework_TestCase
      * @param string $attribute Attribute to write on.
      * @param mixed  $value     The new attribute value.
      */
-    public function writeAttribute($object, $attribute, $value)
+    public static function writeAttribute($object, $attribute, $value)
     {
         $objectReflection = new ReflectionClass($object);
 
