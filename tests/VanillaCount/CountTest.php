@@ -13,6 +13,36 @@ use Rentalhost\VanillaCount\Locale\PortugueseLocale;
 class CountTest extends TestCase
 {
     /**
+     * Test __construct method.
+     *
+     * @covers       \Rentalhost\VanillaCount\Count::__construct
+     */
+    public function testConstruct()
+    {
+        // Load from instance.
+        $count = new Count(new PortugueseLocale());
+
+        static::assertInstanceOf(PortugueseLocale::class, static::readAttribute($count, 'locale'));
+
+        // Load from instance, rewriting options.
+        $count       = new Count(new PortugueseLocale([ 'option' => 'original' ]), [ 'option' => 'rewrited' ]);
+        $countLocale = static::readAttribute($count, 'locale');
+
+        static::assertSame('rewrited', static::readAttribute($countLocale, 'options')->option);
+
+        // Load from string.
+        $count = new Count('portuguese');
+
+        static::assertInstanceOf(PortugueseLocale::class, static::readAttribute($count, 'locale'));
+
+        // Load from string, with options.
+        $count       = new Count('portuguese', [ 'option' => 'value' ]);
+        $countLocale = static::readAttribute($count, 'locale');
+
+        static::assertSame('value', static::readAttribute($countLocale, 'options')->option);
+    }
+
+    /**
      * Test normalizeNumber method.
      *
      * @param string     $expected    Normalized number.

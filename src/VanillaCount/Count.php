@@ -31,11 +31,12 @@ class Count
     /**
      * Count constructor.
      *
-     * @param Locale $locale Locale of instance.
+     * @param Locale|string $locale  Locale of instance.
+     * @param array|null    $options Options of locale.
      */
-    public function __construct(Locale $locale)
+    public function __construct($locale, $options = null)
     {
-        $this->locale = $locale;
+        $this->locale = Locale::getLocale($locale, $options);
     }
 
     /**

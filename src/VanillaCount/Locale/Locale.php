@@ -4,6 +4,7 @@ namespace Rentalhost\VanillaCount\Locale;
 
 use Rentalhost\VanillaCount\Currency\Currency;
 use Rentalhost\VanillaCount\Exception\CurrencyUnsupportedException;
+use Rentalhost\VanillaCount\Exception\LocaleUnsupportedException;
 use Rentalhost\VanillaData\Data;
 
 /**
@@ -69,18 +70,46 @@ abstract class Locale
             return $currency;
         }
 
-        /** @noinspection NotOptimalIfConditionsInspection */
         if (is_subclass_of($currency, Currency::class)) {
             // Else, it can be a string representing a class instance, so get the instance.
             return $currency::getInstance();
         }
 
-        $currency = preg_replace('/\\Currency$/', ucfirst($currency) . 'Currency', Currency::class);
+        $currency = preg_replace('/\\\\Currency$/', '\\' . ucfirst($currency) . 'Currency', Currency::class);
         if (is_subclass_of($currency, Currency::class)) {
             // Else, it can be a string represeting one of prebuild classes, so get the instance.
             return $currency::getInstance();
         }
 
         throw new CurrencyUnsupportedException;
+    }
+
+    /**
+     * Returns a locale with options by name.
+     *
+     * @param self|string $locale  Locale to load.
+     * @param array|null  $options Locale options.
+     *
+     * @throws LocaleUnsupportedException
+     * @return Locale
+     */
+    static public function getLocale($locale, $options = null)
+    {
+        // If locale is not instanceof self, then try to load it from prebuild locales classses.
+        if (!$locale instanceof self) {
+            if (is_string($locale)) {
+                $locale = preg_replace('/\\\\Locale$/', '\\' . ucfirst($locale) . 'Locale', Locale::class);
+                if (is_subclass_of($locale, Locale::class)) {
+                    return new $locale($options);
+                }
+            }
+
+            throw new LocaleUnsupportedException;
+        }
+
+        // Else, just set the passed options and returns the locale.
+        $locale->options->setArray($options);
+
+        return $locale;
     }
 }

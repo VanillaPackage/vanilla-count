@@ -3,6 +3,7 @@
 namespace Rentalhost\VanillaCount\Test;
 
 use Rentalhost\VanillaCount\Currency\RealCurrency;
+use Rentalhost\VanillaCount\Locale\Locale;
 use Rentalhost\VanillaCount\Locale\PortugueseLocale;
 
 /**
@@ -74,5 +75,38 @@ class LocaleTest extends TestCase
             [ 'unsupported' ],
             [ PortugueseLocale::class ],
         ];
+    }
+
+    /**
+     * Test getLocale method.
+     *
+     * @covers \Rentalhost\VanillaCount\Locale\Locale::getLocale
+     */
+    public function testGetLocale()
+    {
+        // Basic.
+        static::assertInstanceOf(PortugueseLocale::class, Locale::getLocale(new PortugueseLocale()));
+        static::assertInstanceOf(PortugueseLocale::class, Locale::getLocale('portuguese'));
+
+        // With options.
+        $locale = Locale::getLocale(new PortugueseLocale([ 'option' => 'original' ]), [ 'option' => 'rewrited' ]);
+
+        static::assertInstanceOf(PortugueseLocale::class, $locale);
+        static::assertSame('rewrited', static::readAttribute($locale, 'options')->option);
+
+        $locale = Locale::getLocale('portuguese', [ 'option' => 'value' ]);
+
+        static::assertInstanceOf(PortugueseLocale::class, $locale);
+        static::assertSame('value', static::readAttribute($locale, 'options')->option);
+    }
+
+    /**
+     * Teste LocaleUnsupportedException exception.
+     *
+     * @expectedException \Rentalhost\VanillaCount\Exception\LocaleUnsupportedException
+     */
+    public function testLocaleUnsupportedException()
+    {
+        Locale::getLocale('unknowLocale');
     }
 }
